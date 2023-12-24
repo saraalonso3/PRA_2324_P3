@@ -19,10 +19,8 @@ class HashTable: public Dict<V>{
 
 	int h(std::string key){
 		int suma = 0;
-		int i = 1;
-		while(i <= key.length()){ //la funcion at(i) obtiene caracter en posicion i
-			suma += int(key.at(i)); //convierte en ASCII
-			i++;
+		for( size_t i=0; i<key.length(); i++){
+			suma += static_cast<int>(key.at(i)); //convierte en ASCII
 		}
 		return suma % max;
 	}
@@ -36,7 +34,7 @@ class HashTable: public Dict<V>{
 	}
 
 	~HashTable(){
-		delete table;
+		delete[] table;
 	}
 
 	int capacity(){
@@ -44,8 +42,14 @@ class HashTable: public Dict<V>{
 	}
 
 	friend std::ostream& operator<<(std::ostream &out, const HashTable<V> &th){
-		//out<<"List =>  ["<<std::endl<<th<<std::endl<<"]";
-	//	return out;
+		out <<"=================="<<std::endl;
+
+		//out<<"HashTable [entries: "<<th->entries()<<", capacity: "<<th->capacity()<<std::endl;
+		for (int i = 0; i < th.max; i++){
+			out<<"Cubeta "<<i<<std::endl<<"List =>  ["<<std::endl<<th.table[i]<<std::endl<<"]"<<std::endl;
+		}
+		out <<"=================="<<std::endl;
+		return out;
 	}
 
 	V operator[](std::string key){
@@ -61,18 +65,18 @@ class HashTable: public Dict<V>{
 
 	void insert(std::string key, V value) override{
 		int cubeta = h(key);
-		int posicion = table[cubeta].search(key); //posicion dentro de la cubeta especifica
-		std::cout<< "La posicion es: "<< posicion<< std::endl;
+		int posicion = table[cubeta].search(key); 
 
-		if(table[cubeta].get(posicion).key == key){ //si la clave ya existe:error
+		if(posicion != -1){
+
 			throw std::runtime_error("La clave ya existe");
 		}
 		
-		else{
-			table[cubeta].insert(posicion, TableEntry(key, value));
-			std::ostream& operator<<(std::ostream &out, const TableEntry<V> &elem);
+		else{ 
+			table[cubeta].insert(table[cubeta].size(), TableEntry(key, value));
 			n++;
 		}
+	
 	}
 
 	V search(std::string key) override{
@@ -92,9 +96,9 @@ class HashTable: public Dict<V>{
                 int posicion = table[cubeta].search(key); //esto te devuelve la posicion en la lista de nodos
 
                 if (posicion >= 0){
-			n--;
 			V valor = table[cubeta].get(posicion).value;
                         table[cubeta].remove(posicion);
+			n--;
 			return valor;
                 }
                 else{
