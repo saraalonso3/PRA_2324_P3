@@ -69,11 +69,15 @@ class BSTree {
 				    n->elem = max(n->left);
 				    n->left = remove_max(n->left);
 			    }
-			    else if(n->left != nullptr){
-				    n = n->left;
-			    }
-			    else if(n->right != nullptr){
+			    else {
+			    	BSNode<T> * aux = n;
+				if(n->left != nullptr){
+					n = n->left;
+			    	}
+			    	else {
 				    n = n->right;
+			    	}
+				delete aux;
 			    }
 		    }
 		    return n;
@@ -92,20 +96,34 @@ class BSTree {
 	    }
 
 	    BSNode<T>* remove_max(BSNode<T>*n){
-		    if(n->right == nullptr)
-			   if(n != nullptr){
-				   return n->left;
+		     if(n == nullptr){
+                            throw std::runtime_error("Error en la búsqueda");
+                    }
+		    
+		     else if(n->right == nullptr){
+			     BSNode<T>* aux = n->left;
+			     delete n;
+			     return aux;
 		    }
 		    else{
 			    n->right = remove_max(n->right);
 			    return n;
 		    }
 	    }
-	    //void delete_cascade(BSNode<T>* n);
+	    
+	    void delete_cascade(BSNode<T>* n){
+		    if(n != nullptr){
+			    delete_cascade(n->left);
+			    delete_cascade(n->right);
+			    delete n;
+		    }
+	    }
 
         
     public:
-	    BSTree();
+	    BSTree(): nelem(0), root(nullptr){ 
+		    
+	    }
 	    int size() const{
 	    	return nelem;
 	    }
@@ -114,10 +132,20 @@ class BSTree {
 	    	return search(root, e)->elem;
 	    }
 
-	    T operator[](T e) const;
+	    T operator[](T e) const{
+		    BSNode<T>* aux = search(root, e);
+		    if(aux != nullptr){
+			    return aux->elem;
+		    }
+		    else{
+			    throw std::runtime_error("Error en la búsqueda");
+		    }
+	    }
+	    
 	    
 	    void insert(T e){
 	    	root = insert(root, e);
+		nelem++;
 	    }
 	    	
 	    friend std::ostream& operator<<(std::ostream &out, const BSTree<T> &bst){
@@ -127,10 +155,12 @@ class BSTree {
 
 	    void remove(T e){
 		    root = remove(root,e);
+		    nelem--;
 	    }
-	    /*~BSTree(){
+	    ~BSTree(){
 		    delete_cascade(root);
-	    }  */
+		    nelem = 0;
+	    }  
 
 
 
