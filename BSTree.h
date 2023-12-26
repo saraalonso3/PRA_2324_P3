@@ -121,7 +121,9 @@ class BSTree {
 
         
     public:
-	    BSTree(): nelem(0), root(nullptr){ 
+	    BSTree(){
+		   nelem = 0;
+		   root = nullptr; 
 		    
 	    }
 	    int size() const{
@@ -159,7 +161,7 @@ class BSTree {
 	    }
 	    ~BSTree(){
 		    delete_cascade(root);
-		    nelem = 0;
+		    root = nullptr;
 	    }  
 
 
