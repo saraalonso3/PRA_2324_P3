@@ -16,7 +16,7 @@ int main()
     bstree.insert(15);
     std::cout << "bstree.size(): " << bstree.size() << std::endl;
     std::cout << "bstree.search(15): ";
-                      std::cout << bstree.search(15) << std::endl;
+    std::cout << bstree.search(15) << std::endl;
     std::cout << "cout << bstree: " << std::endl << bstree << std::endl;
     std::cout << std::endl; 
 

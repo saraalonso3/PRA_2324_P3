@@ -11,9 +11,10 @@ class BSTree {
 	    int nelem;
 	    BSNode<T> *root;
 	    BSNode<T>* search(BSNode<T>* n, T e) const{
+		    
 		    if(n == nullptr){
-			    throw std::runtime_error("Error en la busqueda");
-		    }
+                            throw std::runtime_error("Error en la busqueda");
+                    } 
 		    else if(n->elem < e){
 			    return search(n->right, e);
 		    }
@@ -27,7 +28,7 @@ class BSTree {
 
 	    BSNode<T>* insert(BSNode<T>* n, T e){
 		    if(n == nullptr){
-			    return new BSNode<T>(e);
+			    return new BSNode<T>(e); //crea un nuevo nodo
 		    }
 		    else if(n->elem == e){
 			    throw std::runtime_error("El elemento ya existe");
@@ -43,14 +44,17 @@ class BSTree {
 
 	    //muestra los elementos de menor a mayor
 	   void print_inorder(std::ostream &out, BSNode<T>* n) const{
-		    if(n->left != nullptr){
+		   if(n != nullptr){ 
+		   	if(n->left != nullptr){
 			    print_inorder(out, n->left);
-			    out<<n->elem<<std::endl;
-		    }
-		    if(n->right != nullptr){
+			    
+		    	}
+			 out<<n->elem<<std::endl; 
+		    	if(n->right != nullptr){
 			    print_inorder(out, n->right);
-			    out<<n->elem<<std::endl;
-		    }
+			  
+		    	}
+	  	 }	
 	   }
 
 
@@ -116,7 +120,9 @@ class BSTree {
 			    delete_cascade(n->left);
 			    delete_cascade(n->right);
 			    delete n;
+			   
 		    }
+		    
 	    }
 
         
